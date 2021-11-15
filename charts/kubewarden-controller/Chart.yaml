@@ -17,3 +17,11 @@ version: 0.3.2
 
 # This is the version of kubewarden-controller container image to be used
 appVersion: "v0.4.2"
+
+annotations:
+  hypper.cattle.io/release-name: kubewarden-controller
+  hypper.cattle.io/namespace: kubewarden
+  hypper.cattle.io/shared-dependencies: |
+    - name: kubewarden-crds
+      version: "^0.1.0"
+      repository: "file://../kubewarden-crds"
