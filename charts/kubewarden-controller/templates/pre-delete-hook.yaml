@@ -25,5 +25,5 @@ spec:
       serviceAccountName: {{ include "kubewarden-controller.serviceAccountName" . }}
       containers:
         - name: pre-delete-job
-          image: '{{ .Values.preDeleteJob.image.repository | default "ghcr.io/kubewarden/kubectl" }}:{{ .Values.preDeleteJob.image.tag }}'
+          image: '{{ .Values.preDeleteJob.image.repository }}:{{ .Values.preDeleteJob.image.tag }}'
           command: ["kubectl", "delete", "--all", "policyservers.policies.kubewarden.io"]
