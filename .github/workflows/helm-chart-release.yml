@@ -70,7 +70,7 @@ jobs:
           charts_dir: charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_SKIP_EXISTING: true
+          CR_SKIP_EXISTING: false
 
       - name: Prepare GH pages readme
         run: |
