@@ -37,3 +37,4 @@ annotations:
   # optional ones:
   catalog.cattle.io/provides-gvr: policyservers.policies.kubewarden.io/v1  # Declare that this chart provides a type, which other charts may use in `requires-gvr`. Only add to parent, not CRD chart.
   catalog.cattle.io/hidden: true  # Hide specific charts. Only use on CRD charts.
+  catalog.cattle.io/scope: management # Chart is only applicable to the management/local cluster and will be only shown as an option for the local cluster
