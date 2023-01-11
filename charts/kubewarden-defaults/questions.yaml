@@ -1,0 +1,23 @@
+# This is a Rancher questions file
+---
+questions:
+# Recommended policies questions:
+- variable: "recommendedPolicies.enabled"
+  type: boolean
+  default: false
+  required: true
+  label: Recommended policies
+  description: Whether the recommended policies are enabled or not.
+  group: Settings
+- variable: "recommendedPolicies.defaultPolicyMode"
+  type: enum
+  options:
+    - "monitor"
+    - "protect"
+  default: "monitor"
+  required: true
+  label: Execution mode of the recommended policies
+  description: Execution mode of the recommended policies. "protect" will reject requests,
+    "monitor" will log them. Transitioning from "monitor" to "protect" is
+    allowed, but not from "protect" to "monitor".
+  group: Settings
