@@ -1,0 +1,30 @@
+# This is a Rancher questions file
+---
+questions:
+  - default: null
+    description: >-
+      Experimental Kubewarden features. These features are not recommended for
+      production yet, and are not covered by SemVer guarantees.
+    group: Preview
+    required: false
+    hide_input: true
+    type: string
+    variable: description
+  - variable: "experimental.auditScanner.enable"
+    type: boolean
+    default: false
+    required: true
+    label: Enable experimental Background Audit check
+    description: |
+      The Background Audit Check looks at existing Kubernetes resources and
+      periodically determines whether they are still compliant with regards to the
+      policies that are currently defined.
+    group: Preview
+  - variable: "experimental.auditScanner.cronJob.schedule"
+    type: string
+    default: "*/60 * * * *"
+    show_if: experimental.auditScanner.enable=true
+    label: Schedule
+    description: |
+      Schedule of the Backgroun Audit check. Follows the cron syntax.
+    group: Preview
