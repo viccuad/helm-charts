@@ -2,90 +2,98 @@ name: Update charts with new policy versions, kubectl image
 
 sources:
   kubectlImageTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-controller/values.yaml"
-      key: "$.preDeleteJob.image.tag"
-  allowPrivilegeEscalationPolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.allowPrivilegeEscalationPolicy.module.tag"
-  hostNamespacePolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.hostNamespacePolicy.module.tag"
-  podPrivilegedPolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.podPrivilegedPolicy.module.tag"
-  userGroupPolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.userGroupPolicy.module.tag"
-  hostPathsPolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.hostPathsPolicy.module.tag"
-  capabilitiesPolicyTag:
-    kind: yaml
-    spec:
-      file: "charts/kubewarden-defaults/values.yaml"
-      key: "$.recommendedPolicies.capabilitiesPolicy.module.tag"
-
-conditions:
-  iskubectlImageCurrent:
-    name: Is there a new kubewarden/kubectl tag
     kind: dockerimage
-    sourceid: kubectlImageTag
     spec:
       image: ghcr.io/kubewarden/kubectl
-  isAllowPrivilegeEscalationPolicyCurrent:
-    name: Is there a new privilege-escalation-psp tag
+      versionfilter:
+        kind: semver
+  allowPrivilegeEscalationPolicyTag:
     kind: dockerimage
-    sourceid: allowPrivilegeEscalationPolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/allow-privilege-escalation-psp
-  isHostNamespacePolicyCurrent:
-    name: Is there a new host-namespaces-psp tag
+      versionfilter:
+        kind: semver
+  hostNamespacePolicyTag:
     kind: dockerimage
-    sourceid: hostNamespacePolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/host-namespaces-psp
-  isPodPrivilegedPolicyCurrent:
-    name: Is there a new pod-privileged tag
+      versionfilter:
+        kind: semver
+  podPrivilegedPolicyTag:
     kind: dockerimage
-    sourceid: podPrivilegedPolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/pod-privileged
-  isUserGroupPolicyCurrent:
-    name: Is there a new user-group-psp tag
+      versionfilter:
+        kind: semver
+  userGroupPolicyTag:
     kind: dockerimage
-    sourceid: userGroupPolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/user-group-psp
-  isHostPathsPolicyCurrent:
-    name: Is there a new hostpaths-psp tag
+      versionfilter:
+        kind: semver
+  hostPathsPolicyTag:
     kind: dockerimage
-    sourceid: hostPathsPolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/hostpaths-psp
-  isCapabilitiesPolicyCurrent:
-    name: Is there a new capabilities-psp tag
+      versionfilter:
+        kind: semver
+  capabilitiesPolicyTag:
     kind: dockerimage
-    sourceid: capabilitiesPolicyTag
     spec:
       image: ghcr.io/kubewarden/policies/capabilities-psp
+      versionfilter:
+        kind: semver
+
+# conditions:
+#   iskubectlImageCurrent:
+#     kind: yaml
+#     sourceid: kubectlImageTag
+#     spec:
+#       file: "charts/kubewarden-controller/values.yaml"
+#       key: "$.preDeleteJob.image.tag"
+#   isAllowPrivilegeEscalationPolicyCurrent:
+#     kind: yaml
+#     sourceid: allowPrivilegeEscalationPolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.allowPrivilegeEscalationPolicy.module.tag"
+#   isHostNamespacePolicyCurrent:
+#     kind: yaml
+#     sourceid: hostNamespacePolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.hostNamespacePolicy.module.tag"
+#   isPodPrivilegedPolicyCurrent:
+#     kind: yaml
+#     sourceid: podPrivilegedPolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.podPrivilegedPolicy.module.tag"
+#   isUserGroupPolicyCurrent:
+#     kind: yaml
+#     sourceid: userGroupPolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.userGroupPolicy.module.tag"
+#   isHostPathsPolicyCurrent:
+#     kind: yaml
+#     sourceid: hostPathsPolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.hostPathsPolicy.module.tag"
+#   isCapabilitiesPolicyCurrent:
+#     kind: yaml
+#     sourceid: capabilitiesPolicyTag
+#     spec:
+#       file: "charts/kubewarden-defaults/values.yaml"
+#       key: "$.recommendedPolicies.capabilitiesPolicy.module.tag"
 
 targets:
   updatekubectlTag:
     name: Update kubectl image tag
     kind: yaml
     sourceid: kubectlImageTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-controller/values.yaml"
       key: "$.preDeleteJob.image.tag"
@@ -93,6 +101,7 @@ targets:
     name: Update allow-privilege-escalation-psp tag
     kind: yaml
     sourceid: allowPrivilegeEscalationPolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.allowPrivilegeEscalationPolicy.module.tag"
@@ -100,6 +109,7 @@ targets:
     name: Update host-namespaces-psp tag
     kind: yaml
     sourceid: hostNamespacePolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.hostNamespacePolicy.module.tag"
@@ -107,6 +117,7 @@ targets:
     name: Update pod-privileged tag
     kind: yaml
     sourceid: podPrivilegedPolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.podPrivilegedPolicy.module.tag"
@@ -114,6 +125,7 @@ targets:
     name: Update user-group-psp tag
     kind: yaml
     sourceid: userGroupPolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.userGroupPolicy.module.tag"
@@ -121,6 +133,7 @@ targets:
     name: Update hostpaths-psp tag
     kind: yaml
     sourceid: hostPathsPolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.hostPathsPolicy.module.tag"
@@ -128,12 +141,13 @@ targets:
     name: Update capabilities-psp tag
     kind: yaml
     sourceid: capabilitiesPolicyTag
+    scmid: "default"
     spec:
       file: "charts/kubewarden-defaults/values.yaml"
       key: "$.recommendedPolicies.capabilitiesPolicy.module.tag"
 
 actions:
-  createUpdatePR:
+  openUpdatePR:
     title: "deps: Update policies, kubectl image"
     kind: "github/pullrequest"
     scmid: "default"
