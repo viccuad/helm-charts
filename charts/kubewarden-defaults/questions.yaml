@@ -49,3 +49,64 @@ questions:
       All permissions are cluster-wide. Even namespaced resources are
       granted access in all namespaces at this time.
     group: "Default PolicyServer"
+  # Default PolicyServer HA
+  - variable: "policyServer.replicaCount"
+    type: integer
+    default: 1
+    required: true
+    label: Number of replicas
+    description: |
+      Number of replicas of the PolicyServer Deployment
+    group: "Default PolicyServer HA"
+  - variable: questions.ui.pdb
+    required: false
+    default: "None"
+    type: radio
+    options:
+      - "None"
+      - "minAvailable"
+      - "maxUnavailable"
+    label: "Type of PodDisruptionBudget configuration"
+    group: "Default PolicyServer HA"
+    subquestions:
+      - variable: policyServer.minAvailable
+        default: ""
+        description: |
+          Minimum number of policy-server Pods that must be available at all times.
+          Can be an integer or a percentage.
+        type: string
+        show_if: "questions.ui.pdb=minAvailable"
+        label: Minimum available Pods for PodDisruptionBudget
+      - variable: policyServer.maxUnavailable
+        default: ""
+        description: |
+          Maximum number of policy-server Pods that can be unavailable at any given
+          time.
+          Can be an integer or a percentage.
+        type: string
+        show_if: "questions.ui.pdb=maxUnavailable"
+        label: Maximum unavailable Pods for PodDisruptionBudget
+  - variable: "policyServer.affinity"
+    type: yaml
+    required: false
+    label: Affinity for pods of the default PolicyServer
+    description: |
+      YAML following the Pod spec.affinity format.
+    group: "Default PolicyServer HA"
+  - variable: "policyServer.limits"
+    type: yaml
+    required: false
+    label: Limits on resources of the PolicyServer
+    description: |
+      Limits on resources for the containers of the PolicyServer Pods. Expects
+      a YAML object following the Container spec.limits format.
+    group: "Default PolicyServer HA"
+  - variable: "policyServer.requests"
+    type: yaml
+    required: false
+    label: Requests on resources of the PolicyServer
+    description: |
+      Requests on resources for the containers of the PolicyServer Pods. Expects
+      a YAML object following the Container spec.requests format. If omitted,
+      defaults to `spec.Limits` if that is set.
+    group: "Default PolicyServer HA"

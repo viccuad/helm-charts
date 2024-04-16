@@ -57,6 +57,31 @@ questions:
     description: |
       Additional namespaces that the audit scanner will not scan.
     group: "Audit checks"
+  # controller HA:
+  - variable: "replicas"
+    type: integer
+    default: 1
+    required: true
+    label: Number of replicas
+    description: |
+      Number of replicas of the Controller Deployment
+    group: "Controller HA"
+  - variable: "affinity"
+    type: yaml
+    required: false
+    label: Affinity
+    description: |
+      Affinity of the Controller Pods.
+      YAML following the Pod spec.affinity format.
+    group: "Controller HA"
+  - variable: "tolerations"
+    type: yaml
+    required: false
+    label: Tolerations
+    description: |
+      Tolerations of the Controller Pods.
+      YAML following the Pod spec.tolerations format.
+    group: "Controller HA"
   # Certificates:
   - variable: tls.source
     default: "cert-manager-self-signed"
