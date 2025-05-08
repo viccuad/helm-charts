@@ -160,17 +160,13 @@ jobs:
           cat charts/kubewarden-crds/README.md >> charts/README.md
           cp -f charts/README.md ./to-gh-pages/
           cp -f artifacthub-repo.yml ./to-gh-pages/
+          # move files to workspace root for pages deployment
+          cp -r ./to-gh-pages/* $GITHUB_WORKSPACE/
 
-      - name: Clone existing gh-pages branch and commit
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages
-          cp -r ./to-gh-pages/* gh-pages/
-          cd gh-pages
-          git add .
-          git commit -m "Update GitHub Pages content" || echo "No changes to commit"
-          git push origin gh-pages
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload images and policies file
         shell: bash
