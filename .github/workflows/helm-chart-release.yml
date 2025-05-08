@@ -99,21 +99,21 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -ex
-          
+
           OWNER=${{ github.repository_owner }}
           REPO=helm-charts
           CONFIG_FILE=cr.yaml
           PACKAGE_PATH=.cr-release-packages
           CR_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          
+
           rm -rf ${PACKAGE_PATH}
           # Release each chart in the charts directory
           for chart in $(find charts -maxdepth 1 -mindepth 1  -type d ); do
             chart_name=$(basename $chart)
             chart_path=${PACKAGE_PATH}/${chart_name}-*.tgz
-          
+
             cr package charts/${chart_name} --config ${CONFIG_FILE} --package-path ${PACKAGE_PATH}
-          
+
             # check if the chart version is already release. If so, do nothing
             chart_version=$(helm show chart $chart_path | yq -r '.version')
             if gh --repo ${OWNER}/${REPO} release view $chart_name-$chart_version; then
@@ -121,9 +121,9 @@ jobs:
               rm $chart_path
               continue
             fi
-          
+
           done
-          
+
           # Upload the charts if the .cr-release-packages directory is not empty
           if [ "$(ls ${PACKAGE_PATH})" ]; then
             # Upload the chart to the GitHub release
@@ -149,7 +149,7 @@ jobs:
             done
           fi
 
-      - name: Prepare GH pages readme
+      - name: Prepare GH pages readme & artifacthub-repo.yml
         run: |
           mkdir -p ./to-gh-pages
           cat charts/kubewarden-controller/README.md >> charts/README.md
@@ -158,15 +158,18 @@ jobs:
           echo >> charts/README.md
           cat charts/kubewarden-crds/README.md >> charts/README.md
           cp -f charts/README.md ./to-gh-pages/
+
           cp -f artifacthub-repo.yml ./to-gh-pages/
 
-      - name: Deploy readme to GH pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./to-gh-pages
-          keep_files: true
-          enable_jekyll: true
+      - name: Deploy readme & artifacthub-repo.yml to GH pages
+        run: |
+          git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
+          git checkout gh-pages
+          cp ./to-gh-pages/README.md README.md
+          cp ./to-gh-pages/artifacthub-repo.yml artifacthub-repo.yml
+          git add README.md artifacthub-repo.yml
+          git commit -m "Update combined README, artifacthub-repo.yml" || echo "No changes to commit"
+          git push origin gh-pages
 
       - name: Upload images and policies file
         shell: bash
